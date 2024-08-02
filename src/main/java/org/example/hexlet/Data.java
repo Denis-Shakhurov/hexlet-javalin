@@ -1,5 +1,6 @@
 package org.example.hexlet;
 
+import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 
 import java.util.*;
@@ -39,5 +40,13 @@ public class Data {
     public static long getNextId() {
         long id = ++idCounter;
         return id;
+    }
+
+    public static List<Course> getCourses() {
+        List<Course> courses = new ArrayList<>();
+        courses.add(new Course(1L,"Java", "Java programming training"));
+        courses.add(new Course(2L,"PHP", "PHP programming training"));
+        courses.add(new Course(3L,"HTML", "HTML programming training"));
+        return courses;
     }
 }
