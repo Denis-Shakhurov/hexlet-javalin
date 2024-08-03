@@ -13,7 +13,7 @@ public class Data {
 
     private static long idCounter = ITEMS_COUNT;
 
-    public static List<User> getUsers() {
+    /*public static List<User> getUsers() {
         Random random = new Random(123);
         Faker faker = new Faker(new Locale("en"), random);
 
@@ -30,7 +30,7 @@ public class Data {
             var firstName = faker.name().firstName();
             var lastName = faker.name().lastName();
             var email = faker.internet().emailAddress();
-            User user = new User(id, firstName, lastName, email);
+            User user = new User(firstName, lastName, email);
             users.add(user);
         }
 
@@ -40,13 +40,13 @@ public class Data {
     public static long getNextId() {
         long id = ++idCounter;
         return id;
-    }
+    }*/
 
-    public static List<Course> getCourses() {
+    /*public static List<Course> getCourses() {
         List<Course> courses = new ArrayList<>();
         courses.add(new Course(1L,"Java", "Java programming training"));
         courses.add(new Course(2L,"PHP", "PHP programming training"));
         courses.add(new Course(3L,"HTML", "HTML programming training"));
         return courses;
-    }
+    }*/
 }

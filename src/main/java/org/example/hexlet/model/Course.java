@@ -5,8 +5,7 @@ public class Course {
     private String title;
     private String description;
 
-    public Course(Long id, String title, String description) {
-        this.id = id;
+    public Course(String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -21,5 +20,9 @@ public class Course {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

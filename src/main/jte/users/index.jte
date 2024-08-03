@@ -20,8 +20,8 @@ content = @`
             		 <tbody class="table-striped">
     					<tr>
       					<th scope="row">${page.getUsers().indexOf(user) + 1}</th>
-      					<td><a href="/users/${user.getId()}">${user.getFirstName()}</a></td>
-      					<td><a href="/users/${user.getId()}">${user.getLastName()}</a></td>
+      					<td><a href="/users/${user.getId()}">${user.getName()}</a></td>
+      					<td><a href="/users/${user.getId()}">${user.getName()}</a></td>
       					<td>${user.getEmail()}</td>
     					</tr>
     				</tbody>

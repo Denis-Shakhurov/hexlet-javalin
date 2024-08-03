@@ -10,6 +10,8 @@ import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 import org.apache.commons.text.StringEscapeUtils;
+import org.example.hexlet.repository.CourseRepository;
+import org.example.hexlet.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,8 @@ import java.util.List;
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class HelloWorld {
-    private final static List<User> USERS = Data.getUsers();
-    private final static List<Course> COURSES = Data.getCourses();
+    private final static List<User> USERS = UserRepository.getEntities();
+    private final static List<Course> COURSES = CourseRepository.getEntities();
 
     public static void main(String[] args) {
         // Создаем приложение
@@ -41,22 +43,44 @@ public class HelloWorld {
             ctx.render("users/index.jte", model("page", page));
         });
 
+        app.get("/users/build", ctx -> {
+            ctx.render("users/build.jte");
+        });
+
+        app.post("/users", ctx -> {
+           var name = ctx.formParam("name").trim();
+           var email = ctx.formParam("email").trim().toLowerCase();
+           var password = ctx.formParam("password");
+           var passwordConfirmation = ctx.formParam("passwordConfirmation");
+
+           var user = new User(name, email, password);
+           UserRepository.save(user);
+           ctx.redirect("/users");
+        });
+
         app.get("/users/{id}", ctx -> {
            var id = ctx.pathParamAsClass("id", Long.class).get();
-           var user = USERS.stream()
-                   .filter(usr -> usr.getId() == id)
-                   .findFirst()
-                   .orElseThrow(() -> new NotFoundResponse("User not found"));
+           var user = UserRepository.find(id).get();
            var page = new UserPage(user);
            ctx.render("users/show.jte", model("page", page));
         });
 
+        app.get("/courses/build", ctx -> {
+            ctx.render("courses/build.jte");
+        });
+
+        app.post("/courses", ctx -> {
+            var title = ctx.formParam("title").trim();
+            var description = ctx.formParam("description").trim();
+
+            var course = new Course(title, description);
+            CourseRepository.save(course);
+            ctx.redirect("/courses");
+        });
+
         app.get("/courses/{id}", ctx -> {
             var id = ctx.pathParamAsClass("id", Long.class).get();
-            var course = COURSES.stream()
-                    .filter(crs -> crs.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new NotFoundResponse("Course not found"));
+            var course = CourseRepository.find(id).get();
             var page = new CoursePage(course);
             ctx.render("courses/show.jte", model("page", page));
         });
@@ -64,11 +88,8 @@ public class HelloWorld {
         app.get("/courses", ctx -> {
             var term = ctx.queryParam("term");
             List<Course> courses;
-            // Фильтруем, только если была отправлена форма
             if (term != null) {
-                courses = COURSES.stream()
-                        .filter(course -> course.getTitle().equals(term))
-                        .toList();
+                courses = CourseRepository.search(term);
             } else {
                 courses = COURSES;
             }

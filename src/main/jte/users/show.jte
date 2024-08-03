@@ -3,7 +3,7 @@
 
 @template.layout.page(
 content = @`
-    <h1>${page.getUser().getFirstName()} ${page.getUser().getLastName()}</h1>
+    <h1>${page.getUser().getName()}</h1>
     <p>${page.getUser().getEmail()}</p>
 `
 )
