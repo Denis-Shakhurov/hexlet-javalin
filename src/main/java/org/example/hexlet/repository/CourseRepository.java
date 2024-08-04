@@ -28,6 +28,11 @@ public class CourseRepository {
                 .orElseThrow(() -> new NotFoundResponse("Course not found")));
     }
 
+    public static boolean existsByTitle(String title) {
+        return entities.stream()
+                .anyMatch(value -> value.getTitle().equals(title));
+    }
+
     public static List<Course> getEntities() {
         return entities;
     }

@@ -1,4 +1,5 @@
 @import org.example.hexlet.dto.users.UsersPage
+@import org.example.hexlet.routes.NamedRoutes
 @param UsersPage page
 
 @template.layout.page(
@@ -12,7 +13,6 @@ content = @`
     				<tr>
       					<th scope="col">#</th>
       					<th scope="col">Имя</th>
-      					<th scope="col">Фамилия</th>
       					<th scope="col">Email</th>
     				</tr>
   			</thead>
@@ -20,8 +20,7 @@ content = @`
             		 <tbody class="table-striped">
     					<tr>
       					<th scope="row">${page.getUsers().indexOf(user) + 1}</th>
-      					<td><a href="/users/${user.getId()}">${user.getName()}</a></td>
-      					<td><a href="/users/${user.getId()}">${user.getName()}</a></td>
+      					<td><a href="${NamedRoutes.userPath(user.getId())}">${user.getName()}</a></td>
       					<td>${user.getEmail()}</td>
     					</tr>
     				</tbody>

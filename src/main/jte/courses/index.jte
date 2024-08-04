@@ -1,10 +1,11 @@
 @import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.routes.NamedRoutes
 @param CoursesPage page
 
 @template.layout.page(
 content = @`
     <h1>Курсы программирования</h1>
-	<form action="/courses" method="get">
+	<form action="${NamedRoutes.coursesPath()}" method="get">
 		<input type="search" required name="term" value="${page.getTerm()}">
 		<input type="submit" value="Искать">
 	</form>
@@ -23,7 +24,7 @@ content = @`
             		 <tbody class="table-striped">
     					<tr>
       					<th scope="row">${page.getCourses().indexOf(course) + 1}</th>
-      					<td><a href="/courses/${course.getId()}">${course.getTitle()}</a></td>
+      					<td><a href="${NamedRoutes.coursePath(course.getId())}">${course.getTitle()}</a></td>
       					<td>${course.getDescription()}</td>
     					</tr>
     				</tbody>

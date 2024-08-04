@@ -4,7 +4,6 @@ import io.javalin.validation.ValidationError;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class BuildUserPage {
     private String name;
