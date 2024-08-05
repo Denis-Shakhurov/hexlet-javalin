@@ -3,7 +3,7 @@ import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.routes.NamedRoutes;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "users/index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,2,2,2,4,4,6,6,8,8,10,10,19,19,22,22,22,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,27,27,28,28,29,29,29,30,30,30,2,2,2,2};
+	public static final int[] JTE_LINE_INFO = {0,0,1,2,2,2,4,4,6,6,8,8,10,10,19,19,22,22,22,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,27,27,29,29,30,30,30,31,31,31,2,2,2,2};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, UsersPage page) {
 		jteOutput.writeContent("\n");
 		gg.jte.generated.ondemand.layout.JtepageGenerated.render(jteOutput, jteHtmlInterceptor, new gg.jte.html.HtmlContent() {
@@ -32,9 +32,9 @@ public final class JteindexGenerated {
 						jteOutput.writeContent("</a></td>\n      \t\t\t\t\t<td>");
 						jteOutput.setContext("td", null);
 						jteOutput.writeUserContent(user.getEmail());
-						jteOutput.writeContent("</td>\n    \t\t\t\t\t</tr>\n    \t\t\t\t</tbody>\n            ");
+						jteOutput.writeContent("</td>\n    \t\t\t\t\t</tr>\n    \t\t\t\t</tbody>\n            \t\t");
 					}
-					jteOutput.writeContent("\n    ");
+					jteOutput.writeContent("\n\t\t\t</table>\n    ");
 				}
 				jteOutput.writeContent("\n");
 			}
