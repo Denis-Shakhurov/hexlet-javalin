@@ -32,4 +32,12 @@ public class NamedRoutes {
     public static String coursePath(String id) {
         return "/courses/" + id;
     }
+
+    public static String editPath(String id) {
+        return "/users/" + id + "/edit";
+    }
+
+    public static String editPath(Long id) {
+        return editPath(String.valueOf(id));
+    }
 }
