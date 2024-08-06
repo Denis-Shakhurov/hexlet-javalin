@@ -24,7 +24,8 @@ content = @`
       					<td>${user.getEmail()}</td>
     					</tr>
     				</tbody>
-            @endfor
+            		@endfor
+			</table>
     @endif
 `
 )
