@@ -1,10 +1,13 @@
-@import gg.jte.Content
-@param Content content
-@param Content footer = null
+@import org.example.hexlet.dto.MainPage
+@param MainPage page
 
 @template.layout.page(
 content = @`
-    <h1 class="text-body-emphasis">Hi Hexlet!</h1>
-    <p>Javalin + jte</p>
+    <main>
+        <h1>Привет, Хекслет!</h1>
+        @if(!page.isVisited())
+            Это сообщение показывается только один раз. Если вы хотите увидеть его снова, сотрите
+        @endif
+    </main>
 `
 )
