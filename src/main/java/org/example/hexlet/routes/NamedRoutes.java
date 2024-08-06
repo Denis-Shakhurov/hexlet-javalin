@@ -33,11 +33,19 @@ public class NamedRoutes {
         return "/courses/" + id;
     }
 
-    public static String editPath(String id) {
+    public static String editUserPath(String id) {
         return "/users/" + id + "/edit";
     }
 
-    public static String editPath(Long id) {
-        return editPath(String.valueOf(id));
+    public static String editUserPath(Long id) {
+        return editUserPath(String.valueOf(id));
+    }
+
+    public static String editCoursePath(String id) {
+        return "/courses/" + id + "/edit";
+    }
+
+    public static String editCoursePath(Long id) {
+        return editCoursePath(String.valueOf(id));
     }
 }

@@ -1,34 +1,15 @@
 package org.example.hexlet;
 
 import io.javalin.Javalin;
-import io.javalin.http.ContinueResponse;
-import io.javalin.http.NotFoundResponse;
-import io.javalin.http.UnprocessableContentResponse;
 import io.javalin.rendering.template.JavalinJte;
-import io.javalin.validation.Params;
-import io.javalin.validation.ValidationError;
-import io.javalin.validation.ValidationException;
-import io.javalin.validation.Validator;
-import kotlin.jvm.functions.Function1;
 import org.example.hexlet.conroller.CoursesController;
 import org.example.hexlet.conroller.UsersController;
 import org.example.hexlet.dto.MainPage;
-import org.example.hexlet.dto.courses.BuildCoursePage;
-import org.example.hexlet.dto.courses.CoursePage;
-import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.BuildUserPage;
-import org.example.hexlet.dto.users.UserPage;
-import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
-import org.example.hexlet.model.User;
-import org.apache.commons.text.StringEscapeUtils;
 import org.example.hexlet.repository.CourseRepository;
-import org.example.hexlet.repository.UserRepository;
 import org.example.hexlet.routes.NamedRoutes;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -57,13 +38,15 @@ public class HelloWorld {
         app.get(NamedRoutes.buildUserPath(), UsersController::build);
         app.post(NamedRoutes.usersPath(), UsersController::create);
         app.get(NamedRoutes.userPath("{id}"), UsersController::show);
-        app.get(NamedRoutes.editPath("{id}"), UsersController::edit);
+        app.get(NamedRoutes.editUserPath("{id}"), UsersController::edit);
         app.post(NamedRoutes.userPath("{id}"), UsersController::update);
 
         app.get(NamedRoutes.buildCoursePath(), CoursesController::build);
         app.post(NamedRoutes.coursesPath(), CoursesController::create);
         app.get(NamedRoutes.coursePath("{id}"), CoursesController::show);
         app.get(NamedRoutes.coursesPath(), CoursesController::index);
+        app.get(NamedRoutes.editCoursePath("{id}"), CoursesController::edit);
+        app.post(NamedRoutes.coursePath("{id}"), CoursesController::update);
 
         /*app.get("/users/{id}", ctx -> {
             var id = ctx.pathParam("id");

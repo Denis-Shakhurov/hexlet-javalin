@@ -6,6 +6,6 @@
 content = @`
     <h1>${page.getUser().getName()}</h1>
     <p>${page.getUser().getEmail()}</p>
-    <a href="${NamedRoutes.editPath(page.getUser().getId())}">Редактировать</a>
+    <a href="${NamedRoutes.editUserPath(page.getUser().getId())}">Редактировать</a>
 `
 )

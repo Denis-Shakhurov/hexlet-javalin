@@ -6,6 +6,7 @@ import io.javalin.validation.ValidationException;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.courses.EditCoursePage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.routes.NamedRoutes;
@@ -60,6 +61,37 @@ public class CoursesController {
             ctx.status(422);
             var page = new BuildCoursePage(title1, description1, e.getErrors());
             ctx.render("courses/build.jte", model("page", page));
+        }
+    }
+
+    public static void edit(Context ctx) {
+        var id = ctx.pathParamAsClass("id", Long.class).get();
+        var course = CourseRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
+        var page = new EditCoursePage(course.getId(), course.getTitle(), course.getDescription());
+        ctx.render("courses/edit.jte", model("page", page));
+    }
+
+    public static void update(Context ctx) {
+        var id = ctx.pathParamAsClass("id", Long.class).get();
+        var title1 = ctx.formParam("title");
+        var description1 = ctx.formParam("description");
+        try {
+            var title = ctx.formParamAsClass("title", String.class)
+                    .check(value -> value.length() > 2, "У названия недостаточная длмна")
+                    .check(value -> !CourseRepository.existsByTitle(title1), "Курс с таким названием уже существует")
+                    .get();
+            var description = ctx.formParamAsClass("description", String.class)
+                    .check(value -> value.length() > 10, "У описания недостаточная длмна")
+                    .get();
+            var course = CourseRepository.find(id)
+                    .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
+            course.setTitle(title);
+            course.setDescription(description);
+            ctx.redirect(NamedRoutes.coursePath(id));
+        } catch (ValidationException e) {
+            var page = new EditCoursePage(title1, description1, e.getErrors());
+            ctx.render("courses/edit.jte", model("page", page)).status(422);
         }
     }
 }
