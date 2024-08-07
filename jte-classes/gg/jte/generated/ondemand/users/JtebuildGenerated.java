@@ -52,7 +52,7 @@ public final class JtebuildGenerated {
 				}
 				jteOutput.writeContent(" />\n            </label>\n        </div>\n        <div>\n            <label>\n                Password\n                <input type=\"password\" required name=\"password\" />\n            </label>\n        </div>\n        <div>\n            <label>\n                Password Confirmation\n                <input type=\"password\" required name=\"passwordConfirmation\" />\n            </label>\n        </div>\n        <input type=\"submit\" value=\"Sign Up\" />\n    </form>\n");
 			}
-		});
+		}, null);
 		jteOutput.writeContent("\n");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {

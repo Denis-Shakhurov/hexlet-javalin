@@ -48,4 +48,11 @@ public class NamedRoutes {
     public static String editCoursePath(Long id) {
         return editCoursePath(String.valueOf(id));
     }
+
+    public static String sessionsPath() {
+        return "/sessions";
+    }
+    public static String sessionBuildPath() {
+        return "/sessions/build";
+    }
 }

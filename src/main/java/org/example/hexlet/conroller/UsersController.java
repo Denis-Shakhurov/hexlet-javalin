@@ -21,6 +21,7 @@ public class UsersController {
     public static void index(Context ctx) {
         var header = "Пользователи";
         var page = new UsersPage(USERS, header);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("users/index.jte", model("page", page));
     }
 
@@ -47,11 +48,11 @@ public class UsersController {
                     .get();
             var user = new User(name, email, password);
             UserRepository.save(user);
+            ctx.sessionAttribute("flash", "Пользователь успешно создан");
             ctx.redirect(NamedRoutes.usersPath());
         } catch (ValidationException e) {
-            ctx.status(422);
             var page = new BuildUserPage(name, email, e.getErrors());
-            ctx.render("users/build.jte", model("page", page));
+            ctx.render("users/build.jte", model("page", page)).status(422);
         }
     }
 

@@ -4,7 +4,7 @@ import org.example.hexlet.model.Course;
 
 import java.util.List;
 
-public class CoursesPage {
+public class CoursesPage extends BasePage {
     private List<Course> courses;
     private String term;
 

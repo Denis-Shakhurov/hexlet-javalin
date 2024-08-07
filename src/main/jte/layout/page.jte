@@ -1,6 +1,9 @@
 @import gg.jte.Content
 @import org.example.hexlet.routes.NamedRoutes
+@import org.example.hexlet.dto.courses.BasePage
 @param Content content
+@param BasePage page = null
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,16 +29,16 @@
                 <a class="nav-link" href="${NamedRoutes.coursesPath()}">Courses</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="${NamedRoutes.buildUserPath()}">New User</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${NamedRoutes.buildCoursePath()}">New Course</a>
+                <a class="nav-link" href="${NamedRoutes.sessionBuildPath()}">Login</a>
             </li>
         </ul>
     </div>
 </nav>
 
 <div class="mx-auto p-4 py-md-5">
+    @if(page != null && page.getFlash() != null)
+        <p>${page.getFlash()}</p>
+    @endif
     ${content}
 </div>
 <footer class="fixed-bottom">

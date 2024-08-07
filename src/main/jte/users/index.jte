@@ -5,6 +5,9 @@
 @template.layout.page(
 content = @`
     <h1>Пользователи</h1>
+	@if(page.getFlash() != null)
+		<p class="text-success">${page.getFlash()}</p>
+	@endif
     @if(page.getUsers().isEmpty())
         <p>Пока не добавлено ни одного пользователя</p>
     @else
@@ -27,5 +30,6 @@ content = @`
             		@endfor
 			</table>
     @endif
+	<a class="nav-link" href="${NamedRoutes.buildUserPath()}">New User</a>
 `
 )

@@ -25,7 +25,7 @@ public final class JteshowGenerated {
 				}
 				jteOutput.writeContent(">Редактировать</a>\n");
 			}
-		});
+		}, null);
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
 		CoursePage page = (CoursePage)params.get("page");

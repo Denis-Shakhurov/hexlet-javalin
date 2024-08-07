@@ -5,6 +5,9 @@
 @template.layout.page(
 content = @`
     <h1>Курсы программирования</h1>
+	@if(page.getFlash() != null)
+		<p class="text-success">${page.getFlash()}</p>
+	@endif
 	<form action="${NamedRoutes.coursesPath()}" method="get">
 		<input type="search" required name="term" value="${page.getTerm()}">
 		<input type="submit" value="Искать">
@@ -29,6 +32,8 @@ content = @`
     					</tr>
     				</tbody>
             @endfor
+			</table>
 	@endif
+	<a class="nav-link" href="${NamedRoutes.buildCoursePath()}">New Course</a>
 `
 )
