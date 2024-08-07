@@ -11,27 +11,27 @@ import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.routes.NamedRoutes;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
-public class CoursesController {
-    private final static List<Course> COURSES = CourseRepository.getEntities();
+public class CoursesController { ;
 
-    public static void index(Context ctx) {
+    public static void index(Context ctx) throws SQLException {
         var term = ctx.queryParam("term");
         List<Course> courses;
         if (term != null) {
             courses = CourseRepository.search(term);
         } else {
-            courses = COURSES;
+            courses = CourseRepository.getEntities();
         }
         var page = new CoursesPage(courses, term);
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("courses/index.jte", model("page", page));
     }
 
-    public static void show(Context ctx) {
+    public static void show(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -44,13 +44,19 @@ public class CoursesController {
         ctx.render("courses/build.jte", model("page", page));
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         var title1 = ctx.formParam("title");
         var description1 = ctx.formParam("description");
         try {
             var title = ctx.formParamAsClass("title", String.class)
                     .check(value -> value.length() > 2, "У названия недостаточная длмна")
-                    .check(value -> !CourseRepository.existsByTitle(title1), "Курс с таким названием уже существует")
+                    .check(value -> {
+                        try {
+                            return !CourseRepository.existsByTitle(title1);
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }, "Курс с таким названием уже существует")
                     .get();
             var description = ctx.formParamAsClass("description", String.class)
                     .check(value -> value.length() > 10, "У описания недостаточная длмна")
@@ -66,7 +72,7 @@ public class CoursesController {
         }
     }
 
-    public static void edit(Context ctx) {
+    public static void edit(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var course = CourseRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
@@ -81,7 +87,13 @@ public class CoursesController {
         try {
             var title = ctx.formParamAsClass("title", String.class)
                     .check(value -> value.length() > 2, "У названия недостаточная длмна")
-                    .check(value -> !CourseRepository.existsByTitle(title1), "Курс с таким названием уже существует")
+                    .check(value -> {
+                        try {
+                            return !CourseRepository.existsByTitle(title1);
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }, "Курс с таким названием уже существует")
                     .get();
             var description = ctx.formParamAsClass("description", String.class)
                     .check(value -> value.length() > 10, "У описания недостаточная длмна")
@@ -94,6 +106,8 @@ public class CoursesController {
         } catch (ValidationException e) {
             var page = new EditCoursePage(title1, description1, e.getErrors());
             ctx.render("courses/edit.jte", model("page", page)).status(422);
+        } catch (SQLException e) {
+
         }
     }
 }
