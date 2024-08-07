@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class CourseRepository extends BaseRepository {
-    private static List<Course> entities = new ArrayList<>();
 
     public static void save(Course course) throws SQLException {
-        var sql = "INSERT INTI courses (title, description) VALUES (?, ?)";
+        var sql = "INSERT INTO courses (title, description) VALUES (?, ?)";
         try (var conn = dataSource.getConnection();
             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, course.getTitle());
             preparedStatement.setString(2, course.getDescription());
+            preparedStatement.executeUpdate();
             var generatedKey = preparedStatement.getGeneratedKeys();
             if (generatedKey.next()) {
                 course.setId(generatedKey.getLong(1));
@@ -27,35 +27,33 @@ public class CourseRepository extends BaseRepository {
     }
 
     public static List<Course> search(String term) throws SQLException {
-        List<Course> searchCourse = new ArrayList<>();
-        var sql = "SELECT * FROM courses WHERE title LIKE '%?%'";
+        var sql = "SELECT * FROM courses WHERE title LIKE %?%";
         try (var conn = dataSource.getConnection();
-             var stmt = conn
-                     .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             var stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, term);
-            var generatedKey = stmt.getGeneratedKeys();
-            if (generatedKey.next()) {
-                var title = generatedKey.getString("title");
-                var description = generatedKey.getString("description");
-                var id = generatedKey.getLong("id");
+            var resultSet = stmt.executeQuery();
+            List<Course> searchCourse = new ArrayList<>();
+            while (resultSet.next()) {
+                var title = resultSet.getString("title");
+                var description = resultSet.getString("description");
+                var id = resultSet.getLong("id");
                 var course = new Course(title, description);
                 course.setId(id);
                 searchCourse.add(course);
             }
+            return searchCourse;
         }
-        return searchCourse;
     }
 
     public static Optional<Course> find(Long id) throws SQLException {
         var sql = "SELECT * FROM courses WHERE id = ?";
         try (var conn = dataSource.getConnection();
-            var stmt = conn
-                    .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            var stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
-            var generatedKey = stmt.getGeneratedKeys();
-            if (generatedKey.next()) {
-                var title = generatedKey.getString("title");
-                var description = generatedKey.getString("description");
+            var resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                var title = resultSet.getString("title");
+                var description = resultSet.getString("description");
                 var course = new Course(title, description);
                 course.setId(id);
                 return Optional.of(course);
@@ -65,32 +63,32 @@ public class CourseRepository extends BaseRepository {
     }
 
     public static boolean existsByTitle(String name) throws SQLException {
-        List<Course> searchCourse = new ArrayList<>();
-        var sql = "SELECT * FROM courses WHERE title = '?'";
+        var sql = "SELECT * FROM courses WHERE title = ?";
         try (var conn = dataSource.getConnection();
-             var stmt = conn
-                     .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             var stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name);
-            var generatedKey = stmt.getGeneratedKeys();
-            if (generatedKey.next()) {
-                var title = generatedKey.getString("title");
-                var description = generatedKey.getString("description");
-                var id = generatedKey.getLong("id");
+            var resultSet = stmt.executeQuery();
+            List<Course> searchCourse = new ArrayList<>();
+            if (resultSet.next()) {
+                var title = resultSet.getString("title");
+                var description = resultSet.getString("description");
+                var id = resultSet.getLong("id");
                 var course = new Course(title, description);
                 course.setId(id);
                 searchCourse.add(course);
             }
+            return searchCourse.isEmpty();
         }
-        return searchCourse.isEmpty();
     }
 
     public static List<Course> getEntities() throws SQLException {
-        List<Course> courses = new ArrayList<>();
+
         var sql = "SELECT * FROM courses";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql)) {
             var resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
+            List<Course> courses = new ArrayList<>();
+            while (resultSet.next()) {
                 var title = resultSet.getString("title");
                 var description = resultSet.getString("description");
                 var id = resultSet.getLong("id");
@@ -98,7 +96,17 @@ public class CourseRepository extends BaseRepository {
                 course.setId(id);
                 courses.add(course);
             }
+            return courses;
         }
-        return courses;
+    }
+
+    public static void update(Course course) throws SQLException {
+        var sql = "UPDATE courses SET table = ?, description = ?";
+        try (var conn = dataSource.getConnection();
+             var preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, course.getTitle());
+            preparedStatement.setString(2, course.getDescription());
+            preparedStatement.executeUpdate();
+        }
     }
 }

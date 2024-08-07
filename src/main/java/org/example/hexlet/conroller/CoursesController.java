@@ -52,7 +52,7 @@ public class CoursesController { ;
                     .check(value -> value.length() > 2, "У названия недостаточная длмна")
                     .check(value -> {
                         try {
-                            return !CourseRepository.existsByTitle(title1);
+                            return CourseRepository.existsByTitle(title1);
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
@@ -87,13 +87,6 @@ public class CoursesController { ;
         try {
             var title = ctx.formParamAsClass("title", String.class)
                     .check(value -> value.length() > 2, "У названия недостаточная длмна")
-                    .check(value -> {
-                        try {
-                            return !CourseRepository.existsByTitle(title1);
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }, "Курс с таким названием уже существует")
                     .get();
             var description = ctx.formParamAsClass("description", String.class)
                     .check(value -> value.length() > 10, "У описания недостаточная длмна")
@@ -102,12 +95,12 @@ public class CoursesController { ;
                     .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
             course.setTitle(title);
             course.setDescription(description);
+            CourseRepository.update(course);
             ctx.redirect(NamedRoutes.coursePath(id));
         } catch (ValidationException e) {
             var page = new EditCoursePage(title1, description1, e.getErrors());
             ctx.render("courses/edit.jte", model("page", page)).status(422);
         } catch (SQLException e) {
-
         }
     }
 }

@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 
 public class SessionsController {
     public static void build(Context ctx) {
-        ctx.render("sessions/build.jte");
+        ctx.render("session/build.jte");
     }
 
     public static void create(Context ctx) {
