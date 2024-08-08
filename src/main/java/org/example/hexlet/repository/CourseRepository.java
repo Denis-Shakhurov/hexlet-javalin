@@ -101,11 +101,12 @@ public class CourseRepository extends BaseRepository {
     }
 
     public static void update(Course course) throws SQLException {
-        var sql = "UPDATE courses SET table = ?, description = ?";
+        var sql = "UPDATE courses SET title = ?, description = ? WHERE id = ?";
         try (var conn = dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql)) {
             preparedStatement.setString(1, course.getTitle());
             preparedStatement.setString(2, course.getDescription());
+            preparedStatement.setLong(3, course.getId());
             preparedStatement.executeUpdate();
         }
     }
